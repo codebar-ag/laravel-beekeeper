@@ -2,7 +2,7 @@
 
 use Carbon\CarbonImmutable;
 use CodebarAg\LaravelBeekeeper\Connectors\BeekeeperConnector;
-use CodebarAg\LaravelBeekeeper\Data\File;
+use CodebarAg\LaravelBeekeeper\Data\Files\File;
 use CodebarAg\LaravelBeekeeper\Enums\Files\Status;
 use CodebarAg\LaravelBeekeeper\Enums\Files\UsageType;
 use CodebarAg\LaravelBeekeeper\Requests\UploadAFileRequest;
@@ -39,4 +39,4 @@ test('can get status of authenticated user', function () {
         ->and($uploadAFile->id)->toBeInt()
         ->and($uploadAFile->size)->toBe(strlen($fileContent))
         ->and($uploadAFile->versions)->toBeInstanceOf(Collection::class);
-})->group('user')->only();
+})->group('upload');

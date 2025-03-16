@@ -2,7 +2,7 @@
 
 namespace CodebarAg\LaravelBeekeeper\Responses;
 
-use CodebarAg\LaravelBeekeeper\Data\File;
+use CodebarAg\LaravelBeekeeper\Data\Files\File;
 use Saloon\Http\Response;
 
 final class UploadAFileResponse

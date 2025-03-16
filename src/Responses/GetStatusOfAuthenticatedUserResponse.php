@@ -2,7 +2,7 @@
 
 namespace CodebarAg\LaravelBeekeeper\Responses;
 
-use CodebarAg\LaravelBeekeeper\Data\AuthenticatedUserStatus;
+use CodebarAg\LaravelBeekeeper\Data\Configs\AuthenticatedUserStatus;
 use Saloon\Http\Response;
 
 final class GetStatusOfAuthenticatedUserResponse

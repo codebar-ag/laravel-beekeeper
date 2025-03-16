@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CodebarAg\LaravelBeekeeper\Requests;
 
-use CodebarAg\LaravelBeekeeper\Data\AuthenticatedUserStatus;
+use CodebarAg\LaravelBeekeeper\Data\Configs\AuthenticatedUserStatus;
 use CodebarAg\LaravelBeekeeper\Responses\GetStatusOfAuthenticatedUserResponse;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;

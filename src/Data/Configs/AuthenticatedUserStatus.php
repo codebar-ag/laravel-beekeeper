@@ -1,6 +1,6 @@
 <?php
 
-namespace CodebarAg\LaravelBeekeeper\Data;
+namespace CodebarAg\LaravelBeekeeper\Data\Configs;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;

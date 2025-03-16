@@ -2,7 +2,7 @@
 
 namespace CodebarAg\LaravelBeekeeper\Requests;
 
-use CodebarAg\LaravelBeekeeper\Data\File;
+use CodebarAg\LaravelBeekeeper\Data\Files\File;
 use CodebarAg\LaravelBeekeeper\Responses\UploadAFileResponse;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Data\MultipartValue;

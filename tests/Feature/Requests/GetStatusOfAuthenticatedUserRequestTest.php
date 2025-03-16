@@ -2,8 +2,8 @@
 
 use Carbon\CarbonImmutable;
 use CodebarAg\LaravelBeekeeper\Connectors\BeekeeperConnector;
-use CodebarAg\LaravelBeekeeper\Data\AuthenticatedUserStatus;
-use CodebarAg\LaravelBeekeeper\Data\General;
+use CodebarAg\LaravelBeekeeper\Data\Configs\AuthenticatedUserStatus;
+use CodebarAg\LaravelBeekeeper\Data\Configs\General;
 use CodebarAg\LaravelBeekeeper\Requests\GetStatusOfAuthenticatedUserRequest;
 use Illuminate\Support\Collection;
 
