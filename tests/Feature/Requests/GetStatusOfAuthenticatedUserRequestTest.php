@@ -4,13 +4,13 @@ use Carbon\CarbonImmutable;
 use CodebarAg\LaravelBeekeeper\Connectors\BeekeeperConnector;
 use CodebarAg\LaravelBeekeeper\Data\AuthenticatedUserStatus;
 use CodebarAg\LaravelBeekeeper\Data\General;
-use CodebarAg\LaravelBeekeeper\Requests\GetStatusOfAuthenticatedUser;
+use CodebarAg\LaravelBeekeeper\Requests\GetStatusOfAuthenticatedUserRequest;
 use Illuminate\Support\Collection;
 
 test('can get status of authenticated user', function () {
     $connector = new BeekeeperConnector;
 
-    $response = $connector->send(new GetStatusOfAuthenticatedUser);
+    $response = $connector->send(new GetStatusOfAuthenticatedUserRequest);
 
     $userStatus = $response->dto();
 
@@ -41,4 +41,4 @@ test('can get status of authenticated user', function () {
         ->and($userStatus->general->isDataSecurityContactSet)->toBeBool()
         ->and($userStatus->general->timezone)->toBeString()
         ->and($userStatus->general->subdomain)->toBeString();
-})->group('user')->only();
+})->group('user');

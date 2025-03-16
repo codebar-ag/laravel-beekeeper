@@ -11,7 +11,7 @@ use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Plugins\AcceptsJson;
 
-class GetStatusOfAuthenticatedUser extends Request
+class GetStatusOfAuthenticatedUserRequest extends Request
 {
     use AcceptsJson;
 
