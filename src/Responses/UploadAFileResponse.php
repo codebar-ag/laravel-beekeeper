@@ -14,8 +14,6 @@ final class UploadAFileResponse
     {
         $data = $response->json();
 
-        ray($data);
-
         if (! $data) {
             throw new \Exception('No data found in response');
         }
