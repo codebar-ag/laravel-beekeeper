@@ -79,7 +79,95 @@ BEEKEEPER_CACHE_STORE=beekeeper
 ## DTO Showcase
 
 ```php
+CodebarAg\LaravelBeekeeper\Data\Artifacts\Artifact {
+    +id: "12345678-abcd-efgh-9012-de00edbf7b0b"                   // string
+    +tenantId: "12345"                                            // string
+    +name: "Documents"                                            // string
+    +type: CodebarAg\LaravelBeekeeper\Enums\Artifacts\Type        // Type
+    +parentId: null                                               // string|null
+    +metadata: Illuminate\Support\Collection                      // Collection
+    +createdAt: Carbon\CarbonImmutable                            // CarbonImmutable
+    +updatedAt: Carbon\CarbonImmutable                            // CarbonImmutable
+    +breadcrumbs: Illuminate\Support\Collection                   // Collection
+    +children: Illuminate\Support\Collection                      // Collection
+    +acl: Illuminate\Support\Collection                           // Collection
+    +filterData: Illuminate\Support\Collection                    // Collection
+}
+```
 
+```php
+CodebarAg\LaravelBeekeeper\Data\Configs\AuthenticatedUserStatus {
+    +maxFileSize: 262144000                                             // int|null
+    +maxFilesOnPost: 8                                                  // int|null
+    +maxPhotoSize: 15728640                                             // int|null
+    +maxMediaOnPost: 50                                                 // int|null
+    +maxVideoSize: 524288000                                            // int|null
+    +maxVideoSizeForAdmins: 2147483648                                  // int|null
+    +maxVoiceRecordingLength: 900                                       // int|null
+    +maxUsersInGroupChat: 200                                           // int|null
+    +reactions: Illuminate\Support\Collection                           // Collection|null
+    +featureFlags: Illuminate\Support\Collection                        // Collection|null
+    +integrations: Illuminate\Support\Collection                        // Collection|null
+    +styling: Illuminate\Support\Collection                             // Collection|null
+    +tracking: Illuminate\Support\Collection                            // Collection|null   
+    +general: CodebarAg\LaravelBeekeeper\Data\Configs\General           // General|null
+}
+```
+
+```php
+CodebarAg\LaravelBeekeeper\Data\Configs\General {
+    +id: 12345                                                          // int
+    +companyAccount: "12345678-abcd-efgh-9012-de00edbf7b0b"             // string
+    +name: "foobar"                                                     // string
+    +language: "en"                                                     // string
+    +created: Carbon\CarbonImmutable                                    // CarbonImmutable
+    +url: "https://foobar.us.beekeeper.io/"                             // string
+    +tagline: "Welcome to Beekeeper!"                                   // string
+    +fqdn: "foobar.us.beekeeper.io"                                     // string
+    +supportEmail: ""                                                   // string
+    +isDataSecurityContactSet: false                                    // bool
+    +timezone: "Europe/London"                                          // string    
+    +subdomain: "foobar"                                                // string
+}
+```
+
+```php
+CodebarAg\LaravelBeekeeper\Data\Configs\Reaction {
+    +cldrShortName: "thumbs up"                                         // string
+    +name: "Like"                                                       // string
+    +emoji: "👍"                                                        // string
+}
+```
+
+```php
+CodebarAg\LaravelBeekeeper\Data\Files\File {
+    +name: "test-1.pdf"                                                                               // string
+    +status: CodebarAg\LaravelBeekeeper\Enums\Files\Status                                            // Status|null
+    +created: Carbon\CarbonImmutable                                                                  // CarbonImmutable
+    +updated: Carbon\CarbonImmutable                                                                  // CarbonImmutable
+    +url: "https://foobar.us.beekeeper.io/api/2/files/key/12345678-abcd-efgh-9012-de00edbf7b0b"       // string
+    +userId: "12345678-abcd-efgh-9012-de00edbf7b0b"                                                   // string
+    +height: null                                                                                     // int|null
+    +width: null                                                                                      // int|null
+    +key: "12345678-abcd-efgh-9012-de00edbf7b0b"                                                      // string
+    +duration: null                                                                                   // int|null
+    +mediaType: "application/pdf"                                                                     // string
+    +usageType: CodebarAg\LaravelBeekeeper\Enums\Files\UsageType                                      // UsageType
+    +id: 22268153                                                                                     // int                                 
+    +size: 8570                                                                                       // int
+    +versions: Illuminate\Support\Collection                                                          // Collection
+}
+```
+
+```php
+CodebarAg\LaravelBeekeeper\Data\Files\FileVersion {
+    +name: "test-1.pdf"                                                                               // string
+    +url: "https://foobar.us.beekeeper.io/api/2/files/key/12345678-abcd-efgh-9012-de00edbf7b0b"      // string
+    +height: null                                                                                     // int|null
+    +width: null                                                                                      // int|null
+}
+```
+    
 
 
 ## Testing
