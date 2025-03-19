@@ -8,7 +8,7 @@ use CodebarAg\LaravelBeekeeper\Enums\Files\UsageType;
 use CodebarAg\LaravelBeekeeper\Requests\UploadAFileRequest;
 use Illuminate\Support\Collection;
 
-test('can get status of authenticated user', function () {
+test('can upload a file', function () {
     $connector = new BeekeeperConnector;
 
     $fileContent = file_get_contents(__DIR__.'/../../Fixtures/files/test-1.pdf');
@@ -20,8 +20,6 @@ test('can get status of authenticated user', function () {
     ));
 
     $uploadAFile = $response->dto();
-
-    ray($uploadAFile);
 
     expect($uploadAFile)->toBeInstanceOf(File::class)
         ->and($uploadAFile->name)->toBe($fileName)

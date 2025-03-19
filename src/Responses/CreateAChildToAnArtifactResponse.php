@@ -2,17 +2,18 @@
 
 namespace CodebarAg\LaravelBeekeeper\Responses;
 
-use CodebarAg\LaravelBeekeeper\Data\Configs\AuthenticatedUserStatus;
+use CodebarAg\LaravelBeekeeper\Data\Artifacts\Artifact;
 use Exception;
 use Illuminate\Support\Arr;
 use Saloon\Http\Response;
 
-final class GetStatusOfAuthenticatedUserResponse
+final class CreateAChildToAnArtifactResponse
 {
     /**
      * @throws \JsonException
+     * @throws Exception
      */
-    public static function fromResponse(Response $response): AuthenticatedUserStatus
+    public static function fromResponse(Response $response): Artifact
     {
         $data = $response->json();
 
@@ -31,6 +32,6 @@ final class GetStatusOfAuthenticatedUserResponse
             );
         }
 
-        return AuthenticatedUserStatus::make($data);
+        return Artifact::make($data);
     }
 }

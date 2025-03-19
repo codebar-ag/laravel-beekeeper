@@ -37,6 +37,6 @@ class ListArtifacts extends Request
 
     public function createDtoFromResponse(Response $response): Collection|Enumerable
     {
-        return ListArtifactsResponse::fromResponse($response, $this->type);
+        return ListArtifactsResponse::fromResponse($response);
     }
 }

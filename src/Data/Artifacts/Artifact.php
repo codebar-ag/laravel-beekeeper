@@ -11,8 +11,6 @@ final class Artifact
 {
     public static function make(array $data): self
     {
-        ray($data);
-
         return new self(
             id: Arr::get($data, 'id'),
             tenantId: Arr::get($data, 'tenantId'),
@@ -20,8 +18,8 @@ final class Artifact
             type: Type::tryFrom(Arr::get($data, 'type')),
             parentId: Arr::get($data, 'parentId'),
             metadata: collect(Arr::get($data, 'metadata', [])),
-            createdAt: CarbonImmutable::createFromTimestampMs(Arr::get($data, 'created_at')),
-            updatedAt: CarbonImmutable::createFromTimestampMs(Arr::get($data, 'updated_at')),
+            createdAt: Arr::has($data, 'createdAt') ? CarbonImmutable::createFromTimestampMs(Arr::get($data, 'createdAt')) : null,
+            updatedAt: Arr::has($data, 'updatedAt') ? CarbonImmutable::createFromTimestampMs(Arr::get($data, 'updatedAt')) : null,
             breadcrumbs: collect(Arr::get($data, 'breadcrumbs', [])),
             children: collect(Arr::get($data, 'children', []))->map(fn (array $child) => Artifact::make($child)),
             acl: collect(Arr::get($data, 'acl', [])),
@@ -36,8 +34,8 @@ final class Artifact
         public Type $type,
         public ?string $parentId,
         public Collection $metadata,
-        public CarbonImmutable $createdAt,
-        public CarbonImmutable $updatedAt,
+        public ?CarbonImmutable $createdAt,
+        public ?CarbonImmutable $updatedAt,
         public Collection $breadcrumbs,
         public Collection $children,
         public Collection $acl,
