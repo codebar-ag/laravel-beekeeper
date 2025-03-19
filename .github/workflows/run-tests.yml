@@ -46,6 +46,9 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/pest
+        env:
+          BEEKEEPER_ENDPOINT_PREFIX: ${{ secrets.BEEKEEPER_ENDPOINT_PREFIX }}
+          BEEKEEPER_API_TOKEN: ${{ secrets.BEEKEEPER_API_TOKEN }}
 
       - name: Store Log Artifacts
         if: failure()
