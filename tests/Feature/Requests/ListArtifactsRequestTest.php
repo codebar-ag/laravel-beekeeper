@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\CarbonImmutable;
 use CodebarAg\LaravelBeekeeper\Connectors\BeekeeperConnector;
 use CodebarAg\LaravelBeekeeper\Data\Artifacts\Artifact;
 use CodebarAg\LaravelBeekeeper\Enums\Artifacts\Sort;
@@ -26,8 +27,8 @@ test('can list artifacts', function () {
         ->and($listArtifacts->first()->type)->toBeInstanceOf(Type::class)
         ->and($listArtifacts->first()->parentId)->toBeNull()
         ->and($listArtifacts->first()->metadata)->toBeInstanceOf(Collection::class)
-        ->and($listArtifacts->first()->createdAt)->toBeNull()
-        ->and($listArtifacts->first()->updatedAt)->toBeNull()
+        ->and($listArtifacts->first()->createdAt)->toBeInstanceOf(CarbonImmutable::class)
+        ->and($listArtifacts->first()->updatedAt)->toBeInstanceOf(CarbonImmutable::class)
         ->and($listArtifacts->first()->breadcrumbs)->toBeInstanceOf(Collection::class)
         ->and($listArtifacts->first()->children)->toBeInstanceOf(Collection::class)
         ->and($listArtifacts->first()->acl)->toBeInstanceOf(Collection::class)

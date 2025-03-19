@@ -42,4 +42,4 @@ test('can create a child to an artifact', closure: function () {
         ->and($child->children)->toBeInstanceOf(Collection::class)
         ->and($child->acl)->toBeInstanceOf(Collection::class)
         ->and($child->filterData)->toBeInstanceOf(Collection::class);
-})->group('upload')->only();
+})->group('upload');
