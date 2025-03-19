@@ -1,4 +1,4 @@
-<img src="https://banners.beyondco.de/Laravel%20Beekeeper.png?theme=light&packageManager=composer+require&packageName=codebar-ag%2Flaravel-beekeeper&pattern=circuitBoard&style=style_1&description=An+opinionated+way+to+integrate+Beekeeper+with+Laravel&md=1&showWatermark=0&fontSize=175px&images=photograph">
+<img src="https://banners.beyondco.de/Laravel%20Beekeeper.png?theme=light&packageManager=composer+require&packageName=codebar-ag%2Flaravel-beekeeper&pattern=architect&style=style_1&description=An+opinionated+way+to+integrate+Beekeeper+with+Laravel&md=1&showWatermark=0&fontSize=100px&images=cloud">
 
 
 
@@ -18,6 +18,11 @@ Beekeeper Api. It is used to query the most common endpoints.
   * [🛠 Requirements](#-requirements)
   * [Installation](#installation)
   * [Usage](#usage)
+    * [Get the connector](#get-the-connector)
+    * [Get The Status Of The Authenticated User](#get-the-status-of-the-authenticated-user)
+    * [List Artifacts](#list-artifacts)
+    * [Upload A File](#upload-a-file)
+    * [Create A Child To An Artifact](#create-a-child-to-an-artifact)
   * [DTO Showcase](#dto-showcase)
   * [Testing](#testing)
   * [Changelog](#changelog)
@@ -76,22 +81,95 @@ BEEKEEPER_CACHE_STORE=beekeeper
 
 ## Usage
 
+### Get the connector
+
+```php
+use CodebarAg\LaravelBeekeeper\Connectors\BeekeeperConnector;
+
+// Using the env variables
+$connector = new BeekeeperConnector;
+
+// Passing the credentials manually
+$connector = new BeekeeperConnector(
+    apiToken: $yourApiToken,
+    endpointPrefix: 'foobar.us',
+);
+```
+
+### Get The Status Of The Authenticated User
+
+```php
+use CodebarAg\LaravelBeekeeper\Requests\GetStatusOfAuthenticatedUserRequest;
+
+$response = $connector->send(new GetStatusOfAuthenticatedUserRequest);
+````
+
+### List Artifacts
+
+```php
+use CodebarAg\LaravelBeekeeper\Requests\ListArtifacts;
+
+$response = $connector->send(new ListArtifacts(
+    type: Type::FOLDER,
+    sort: Sort::NAME_ASC,
+    limit: 20,
+));
+```
+
+### Upload A File
+
+```php
+use CodebarAg\LaravelBeekeeper\Requests\UploadAFileRequest;
+
+$fileContent = file_get_contents('path-to/foobar.pdf');
+$fileName = 'foobar.pdf';
+
+$response = $connector->send(new UploadAFileRequest(
+    fileContent: $fileContent,
+    fileName: $fileName,
+));
+```
+
+### Create A Child To An Artifact
+
+```php
+use CodebarAg\LaravelBeekeeper\Requests\CreateAChildToAnArtifact;
+use CodebarAg\LaravelBeekeeper\Enums\Artifacts\Type;
+
+$response = $connector->send(new CreateAChildToAnArtifact(
+    artifactId: '12345678-abcd-efgh-9012-de00edbf7b0b',
+    name: 'foobar.pdf',
+    type: Type::FILE,
+    parentId: '12345678-abcd-efgh-9012-de00edbf7b0b',
+    metadata: [
+        'mimeType' => 'image/png',
+        'url' => 'https://foobar.us.beekeeper.io/api/2/files/key/12345678-abcd-efgh-9012-de00edbf7b0b',
+        'userId' => '12345678-abcd-efgh-9012-de00edbf7b0b',
+        'key' => '12345678-abcd-efgh-9012-de00edbf7b0b',
+        'id' => 12345678,
+        'size' => 123456,
+    ],
+    adjustArtifactName: false,
+    expand: []
+));
+```
+
 ## DTO Showcase
 
 ```php
 CodebarAg\LaravelBeekeeper\Data\Artifacts\Artifact {
-    +id: "12345678-abcd-efgh-9012-de00edbf7b0b"                   // string
-    +tenantId: "12345"                                            // string
-    +name: "Documents"                                            // string
-    +type: CodebarAg\LaravelBeekeeper\Enums\Artifacts\Type        // Type
-    +parentId: null                                               // string|null
-    +metadata: Illuminate\Support\Collection                      // Collection
-    +createdAt: Carbon\CarbonImmutable                            // CarbonImmutable
-    +updatedAt: Carbon\CarbonImmutable                            // CarbonImmutable
-    +breadcrumbs: Illuminate\Support\Collection                   // Collection
-    +children: Illuminate\Support\Collection                      // Collection
-    +acl: Illuminate\Support\Collection                           // Collection
-    +filterData: Illuminate\Support\Collection                    // Collection
+    +id: "12345678-abcd-efgh-9012-de00edbf7b0b"                         // string
+    +tenantId: "12345"                                                  // string
+    +name: "Documents"                                                  // string
+    +type: CodebarAg\LaravelBeekeeper\Enums\Artifacts\Type              // Type
+    +parentId: null                                                     // string|null
+    +metadata: Illuminate\Support\Collection                            // Collection
+    +createdAt: Carbon\CarbonImmutable                                  // CarbonImmutable
+    +updatedAt: Carbon\CarbonImmutable                                  // CarbonImmutable
+    +breadcrumbs: Illuminate\Support\Collection                         // Collection
+    +children: Illuminate\Support\Collection                            // Collection
+    +acl: Illuminate\Support\Collection                                 // Collection
+    +filterData: Illuminate\Support\Collection                          // Collection
 }
 ```
 

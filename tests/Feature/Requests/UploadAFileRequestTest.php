@@ -21,8 +21,6 @@ test('can upload a file', function () {
 
     $uploadAFile = $response->dto();
 
-    ray($uploadAFile);
-
     expect($uploadAFile)->toBeInstanceOf(File::class)
         ->and($uploadAFile->name)->toBe($fileName)
         ->and($uploadAFile->status)->toBe(Status::READY)
@@ -39,4 +37,4 @@ test('can upload a file', function () {
         ->and($uploadAFile->id)->toBeInt()
         ->and($uploadAFile->size)->toBe(strlen($fileContent))
         ->and($uploadAFile->versions)->toBeInstanceOf(Collection::class);
-})->group('upload')->only();
+})->group('upload');
