@@ -27,7 +27,7 @@ final class General
 
     public function __construct(
         public int $id,
-        public string $companyAccount,
+        public ?string $companyAccount,
         public string $name,
         public string $language,
         public CarbonImmutable $created,

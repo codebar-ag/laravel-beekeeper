@@ -6,10 +6,35 @@ use CodebarAg\LaravelBeekeeper\Data\Artifacts\Artifact;
 use CodebarAg\LaravelBeekeeper\Enums\Artifacts\Type;
 use CodebarAg\LaravelBeekeeper\Requests\CreateAChildToAnArtifact;
 use Illuminate\Support\Collection;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Laravel\Facades\Saloon;
 
 test('can create a child to an artifact', closure: function () {
-    $connector = new BeekeeperConnector;
+    Saloon::fake([
+        CreateAChildToAnArtifact::class => MockResponse::make([
+            'id' => '1b574087-e428-4640-a6c1-37a62fbf357f',
+            'tenantId' => 'tenant-123',
+            'name' => 'test-file.png',
+            'type' => 'file',
+            'parentId' => '9a6d0642-fb9d-4f0f-9720-de00edbf7b0b',
+            'metadata' => [
+                'mimeType' => 'image/png',
+                'url' => 'https://codebar.us.beekeeper.io/api/2/files/key/dc8da887-fec5-4022-914e-fa34091f3485',
+                'userId' => 'd84bed15-2a56-41b4-8e6a-7ee731e2ce34',
+                'key' => 'dc8da887-fec5-4022-914e-fa34091f3485',
+                'id' => 22189080,
+                'size' => 235978,
+            ],
+            'createdAt' => '2023-01-01T00:00:00Z',
+            'updatedAt' => '2023-01-01T00:00:00Z',
+            'breadcrumbs' => [],
+            'children' => [],
+            'acl' => [],
+            'filterData' => [],
+        ], 200),
+    ]);
 
+    $connector = new BeekeeperConnector;
     $response = $connector->send(new CreateAChildToAnArtifact(
         artifactId: '1b574087-e428-4640-a6c1-37a62fbf357f',
         name: Str::random(23).'.png',

@@ -7,10 +7,30 @@ use CodebarAg\LaravelBeekeeper\Enums\Artifacts\Sort;
 use CodebarAg\LaravelBeekeeper\Enums\Artifacts\Type;
 use CodebarAg\LaravelBeekeeper\Requests\ListArtifacts;
 use Illuminate\Support\Collection;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Laravel\Facades\Saloon;
 
 test('can list artifacts', function () {
-    $connector = new BeekeeperConnector;
+    Saloon::fake([
+        ListArtifacts::class => MockResponse::make([
+            [
+                'id' => 'artifact-123',
+                'tenantId' => 'tenant-123',
+                'name' => 'Test Folder',
+                'type' => 'folder',
+                'parentId' => null,
+                'metadata' => [],
+                'createdAt' => '2023-01-01T00:00:00Z',
+                'updatedAt' => '2023-01-01T00:00:00Z',
+                'breadcrumbs' => [],
+                'children' => [],
+                'acl' => [],
+                'filterData' => [],
+            ],
+        ], 200),
+    ]);
 
+    $connector = new BeekeeperConnector;
     $response = $connector->send(new ListArtifacts(
         type: Type::FOLDER,
         sort: Sort::NAME_ASC,
