@@ -6,10 +6,63 @@ use CodebarAg\LaravelBeekeeper\Data\Files\File;
 use CodebarAg\LaravelBeekeeper\Data\Streams\Post;
 use CodebarAg\LaravelBeekeeper\Requests\CreateAPostInAGivenStream;
 use Illuminate\Support\Collection;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Laravel\Facades\Saloon;
 
 test('can create a post in a given stream with minimal data', closure: function () {
-    $connector = new BeekeeperConnector;
+    Saloon::fake([
+        CreateAPostInAGivenStream::class => MockResponse::make([
+            'id' => 12345,
+            'text' => 'Please indicate your preferred dates for next team event in the poll below. Thanks!',
+            'title' => null,
+            'labels' => [],
+            'sticky' => false,
+            'like_count' => 0,
+            'streamid' => 6002,
+            'digest' => 1,
+            'user_id' => 'user-123',
+            'uuid' => 'post-uuid-123',
+            'comment_count' => 0,
+            'report_count' => 0,
+            'source' => 'web',
+            'vote_count' => 0,
+            'moderated' => false,
+            'photo' => null,
+            'language_confidence' => null,
+            'type' => 'post',
+            'metadata' => null,
+            'profile' => null,
+            'edited' => false,
+            'display_name_extension' => null,
+            'subscribed_by_user' => false,
+            'reportable' => true,
+            'anonymous' => false,
+            'display_name' => null,
+            'unread' => false,
+            'locked' => false,
+            'reactions_disabled' => false,
+            'name' => null,
+            'language' => null,
+            'language_information' => null,
+            'created' => '2023-01-01T00:00:00Z',
+            'posted_by_user' => true,
+            'avatar' => null,
+            'reported_by_user' => false,
+            'liked_by_user' => false,
+            'mentions' => [],
+            'mentions_details' => null,
+            'scheduled_at' => null,
+            'status' => null,
+            'files' => [],
+            'photos' => [],
+            'videos' => [],
+            'media' => [],
+            'options' => [],
+            'state_id' => null,
+        ], 200),
+    ]);
 
+    $connector = new BeekeeperConnector;
     $response = $connector->send(new CreateAPostInAGivenStream(
         streamId: '6002',
         text: 'Please indicate your preferred dates for next team event in the poll below. Thanks!'
@@ -33,8 +86,6 @@ test('can create a post in a given stream with minimal data', closure: function 
 })->group('streams');
 
 test('can create a post in a given stream with all optional parameters', closure: function () {
-    $connector = new BeekeeperConnector;
-
     $fileData = [
         'updated' => '2016-10-07T12:49:21',
         'name' => 'fair_play_rules.pdf',
@@ -51,6 +102,62 @@ test('can create a post in a given stream with all optional parameters', closure
         'size' => 85,
     ];
 
+    Saloon::fake([
+        CreateAPostInAGivenStream::class => MockResponse::make([
+            'id' => 12345,
+            'text' => 'Please indicate your preferred dates for next team event in the poll below. Thanks!',
+            'title' => 'Hello guys!',
+            'labels' => ['food', 'poll', 'events'],
+            'sticky' => true,
+            'like_count' => 0,
+            'streamid' => 6002,
+            'digest' => 1,
+            'user_id' => 'user-123',
+            'uuid' => 'post-uuid-123',
+            'comment_count' => 0,
+            'report_count' => 0,
+            'source' => 'web',
+            'vote_count' => 0,
+            'moderated' => false,
+            'photo' => null,
+            'language_confidence' => null,
+            'type' => 'post',
+            'metadata' => null,
+            'profile' => null,
+            'edited' => false,
+            'display_name_extension' => null,
+            'subscribed_by_user' => false,
+            'reportable' => true,
+            'anonymous' => false,
+            'display_name' => null,
+            'unread' => false,
+            'locked' => true,
+            'reactions_disabled' => true,
+            'name' => null,
+            'language' => null,
+            'language_information' => null,
+            'created' => '2023-01-01T00:00:00Z',
+            'posted_by_user' => true,
+            'avatar' => null,
+            'reported_by_user' => false,
+            'liked_by_user' => false,
+            'mentions' => [],
+            'mentions_details' => null,
+            'scheduled_at' => '2019-08-24T14:15:22Z',
+            'status' => null,
+            'files' => [$fileData],
+            'photos' => [$fileData],
+            'videos' => [$fileData],
+            'media' => [$fileData],
+            'options' => [
+                ['text' => 'This Friday'],
+                ['text' => 'Monday next week'],
+            ],
+            'state_id' => null,
+        ], 200),
+    ]);
+
+    $connector = new BeekeeperConnector;
     $response = $connector->send(new CreateAPostInAGivenStream(
         streamId: '6002',
         text: 'Please indicate your preferred dates for next team event in the poll below. Thanks!',
@@ -97,8 +204,6 @@ test('can create a post in a given stream with all optional parameters', closure
 })->group('streams');
 
 test('can create a post with collection parameters', closure: function () {
-    $connector = new BeekeeperConnector;
-
     $fileData = [
         'updated' => '2016-10-07T12:49:21',
         'name' => 'test_file.pdf',
@@ -115,6 +220,62 @@ test('can create a post with collection parameters', closure: function () {
         'size' => 1024,
     ];
 
+    Saloon::fake([
+        CreateAPostInAGivenStream::class => MockResponse::make([
+            'id' => 12345,
+            'text' => 'Test post with collections',
+            'title' => null,
+            'labels' => ['test', 'collection'],
+            'sticky' => false,
+            'like_count' => 0,
+            'streamid' => 6002,
+            'digest' => 1,
+            'user_id' => 'user-123',
+            'uuid' => 'post-uuid-123',
+            'comment_count' => 0,
+            'report_count' => 0,
+            'source' => 'web',
+            'vote_count' => 0,
+            'moderated' => false,
+            'photo' => null,
+            'language_confidence' => null,
+            'type' => 'post',
+            'metadata' => null,
+            'profile' => null,
+            'edited' => false,
+            'display_name_extension' => null,
+            'subscribed_by_user' => false,
+            'reportable' => true,
+            'anonymous' => false,
+            'display_name' => null,
+            'unread' => false,
+            'locked' => false,
+            'reactions_disabled' => false,
+            'name' => null,
+            'language' => null,
+            'language_information' => null,
+            'created' => '2023-01-01T00:00:00Z',
+            'posted_by_user' => true,
+            'avatar' => null,
+            'reported_by_user' => false,
+            'liked_by_user' => false,
+            'mentions' => [],
+            'mentions_details' => null,
+            'scheduled_at' => null,
+            'status' => null,
+            'files' => [$fileData],
+            'photos' => [],
+            'videos' => [],
+            'media' => [],
+            'options' => [
+                ['text' => 'Option 1'],
+                ['text' => 'Option 2'],
+            ],
+            'state_id' => null,
+        ], 200),
+    ]);
+
+    $connector = new BeekeeperConnector;
     $response = $connector->send(new CreateAPostInAGivenStream(
         streamId: '6002',
         text: 'Test post with collections',
@@ -138,8 +299,59 @@ test('can create a post with collection parameters', closure: function () {
 })->group('streams');
 
 test('post response contains all expected fields', closure: function () {
-    $connector = new BeekeeperConnector;
+    Saloon::fake([
+        CreateAPostInAGivenStream::class => MockResponse::make([
+            'id' => 12345,
+            'text' => 'Test post for field validation',
+            'title' => 'Test Title',
+            'labels' => [],
+            'sticky' => false,
+            'like_count' => 5,
+            'streamid' => 6002,
+            'digest' => 1,
+            'user_id' => 'user-123',
+            'uuid' => 'post-uuid-123',
+            'comment_count' => 3,
+            'report_count' => 0,
+            'source' => 'web',
+            'vote_count' => 2,
+            'moderated' => false,
+            'photo' => 'photo-url',
+            'language_confidence' => 0.95,
+            'type' => 'post',
+            'metadata' => '{"key": "value"}',
+            'profile' => 'profile-123',
+            'edited' => false,
+            'display_name_extension' => 'Jr.',
+            'subscribed_by_user' => true,
+            'reportable' => true,
+            'anonymous' => false,
+            'display_name' => 'John Doe',
+            'unread' => false,
+            'locked' => false,
+            'reactions_disabled' => false,
+            'name' => 'John',
+            'language' => 'en',
+            'language_information' => ['confidence' => 0.95],
+            'created' => '2023-01-01T00:00:00Z',
+            'posted_by_user' => true,
+            'avatar' => 'https://example.com/avatar.jpg',
+            'reported_by_user' => false,
+            'liked_by_user' => true,
+            'mentions' => [],
+            'mentions_details' => null,
+            'scheduled_at' => null,
+            'status' => 'published',
+            'files' => [],
+            'photos' => [],
+            'videos' => [],
+            'media' => [],
+            'options' => [],
+            'state_id' => 'state-123',
+        ], 200),
+    ]);
 
+    $connector = new BeekeeperConnector;
     $response = $connector->send(new CreateAPostInAGivenStream(
         streamId: '6002',
         text: 'Test post for field validation',
@@ -189,17 +401,17 @@ test('post response contains all expected fields', closure: function () {
         ->and($post->mentions)->toBeInstanceOf(Collection::class);
 
     // Test optional fields
-    expect($post->photo)->toBeStringOrNull()
-        ->and($post->languageConfidence)->toBeFloatOrNull()
-        ->and($post->metadata)->toBeStringOrNull()
-        ->and($post->profile)->toBeStringOrNull()
-        ->and($post->displayNameExtension)->toBeStringOrNull()
-        ->and($post->displayName)->toBeStringOrNull()
-        ->and($post->name)->toBeStringOrNull()
-        ->and($post->language)->toBeStringOrNull()
-        ->and($post->avatar)->toBeStringOrNull()
-        ->and($post->status)->toBeStringOrNull()
-        ->and($post->stateId)->toBeStringOrNull();
+    expect($post->photo)->toBeString()
+        ->and($post->languageConfidence)->toBeFloat()
+        ->and($post->metadata)->toBeString()
+        ->and($post->profile)->toBeString()
+        ->and($post->displayNameExtension)->toBeString()
+        ->and($post->displayName)->toBeString()
+        ->and($post->name)->toBeString()
+        ->and($post->language)->toBeString()
+        ->and($post->avatar)->toBeString()
+        ->and($post->status)->toBeString()
+        ->and($post->stateId)->toBeString();
 
     // Test timestamps
     if ($post->created) {
