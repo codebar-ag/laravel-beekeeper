@@ -38,6 +38,7 @@ test('can upload a file', function () {
     $response = $connector->send(new UploadAFileRequest(
         fileContent: $fileContent,
         fileName: $fileName,
+        usageType: 'attachment_file',
     ));
 
     $uploadAFile = $response->dto();

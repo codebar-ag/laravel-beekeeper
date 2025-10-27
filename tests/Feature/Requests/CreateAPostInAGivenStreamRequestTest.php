@@ -78,8 +78,6 @@ test('can create a post in a given stream with minimal data', closure: function 
         ->and($post->uuid)->toBeString()
         ->and($post->labels)->toBeInstanceOf(Collection::class)
         ->and($post->files)->toBeInstanceOf(Collection::class)
-        ->and($post->photos)->toBeInstanceOf(Collection::class)
-        ->and($post->videos)->toBeInstanceOf(Collection::class)
         ->and($post->media)->toBeInstanceOf(Collection::class)
         ->and($post->options)->toBeInstanceOf(Collection::class)
         ->and($post->mentions)->toBeInstanceOf(Collection::class);
@@ -168,8 +166,6 @@ test('can create a post in a given stream with all optional parameters', closure
         reactionsDisabled: true,
         scheduledAt: '2019-08-24T14:15:22',
         files: [$fileData],
-        photos: [$fileData],
-        videos: [$fileData],
         media: [$fileData],
         options: [
             ['text' => 'This Friday'],
@@ -192,10 +188,6 @@ test('can create a post in a given stream with all optional parameters', closure
         ->and($post->scheduledAt)->toBeInstanceOf(CarbonImmutable::class)
         ->and($post->files)->toHaveCount(1)
         ->and($post->files->first())->toBeInstanceOf(File::class)
-        ->and($post->photos)->toHaveCount(1)
-        ->and($post->photos->first())->toBeInstanceOf(File::class)
-        ->and($post->videos)->toHaveCount(1)
-        ->and($post->videos->first())->toBeInstanceOf(File::class)
         ->and($post->media)->toHaveCount(1)
         ->and($post->media->first())->toBeInstanceOf(File::class)
         ->and($post->options)->toHaveCount(2)

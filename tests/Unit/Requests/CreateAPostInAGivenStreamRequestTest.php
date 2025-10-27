@@ -43,8 +43,6 @@ test('can create request with all parameters', function () {
         reactionsDisabled: true,
         scheduledAt: '2019-08-24T14:15:22',
         files: [$fileData],
-        photos: [$fileData],
-        videos: [$fileData],
         media: [$fileData],
         options: [
             ['text' => 'Option 1'],
@@ -291,8 +289,6 @@ test('post data mapping works correctly', function () {
         ->and($post->files)->toBeInstanceOf(Collection::class)
         ->and($post->files)->toHaveCount(1)
         ->and($post->files->first())->toBeInstanceOf(File::class)
-        ->and($post->photos)->toBeInstanceOf(Collection::class)
-        ->and($post->videos)->toBeInstanceOf(Collection::class)
         ->and($post->media)->toBeInstanceOf(Collection::class)
         ->and($post->options)->toBeInstanceOf(Collection::class)
         ->and($post->options)->toHaveCount(2)

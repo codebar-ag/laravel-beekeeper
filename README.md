@@ -25,6 +25,7 @@ files, streams, and posts.
     * [List Artifacts](#list-artifacts)
     * [Upload A File](#upload-a-file)
     * [Create A Child To An Artifact](#create-a-child-to-an-artifact)
+    * [Delete An Artifact](#delete-an-artifact)
     * [Create A Post In A Given Stream](#create-a-post-in-a-given-stream)
   * [DTO Showcase](#dto-showcase)
   * [Available Enums](#available-enums)
@@ -141,6 +142,7 @@ $fileName = 'foobar.pdf';
 $response = $connector->send(new UploadAFileRequest(
     fileContent: $fileContent,
     fileName: $fileName,
+    usageType: 'attachment_file',
 ));
 ```
 
@@ -166,6 +168,18 @@ $response = $connector->send(new CreateAChildToAnArtifact(
     adjustArtifactName: false,
     expand: []
 ));
+```
+
+### Delete An Artifact
+
+```php
+use CodebarAg\LaravelBeekeeper\Requests\DeleteAnArtifact;
+
+$response = $connector->send(new DeleteAnArtifact(
+    artifactId: '12345678-abcd-efgh-9012-de00edbf7b0b'
+));
+
+// Returns a 204 No Content response on success
 ```
 
 ### Create A Post In A Given Stream
@@ -206,8 +220,6 @@ $response = $connector->send(new CreateAPostInAGivenStream(
     reactionsDisabled: true,
     scheduledAt: '2019-08-24T14:15:22',
     files: [$fileData],
-    photos: [$fileData],
-    videos: [$fileData],
     media: [$fileData],
     options: [
         ['text' => 'This Friday'],
