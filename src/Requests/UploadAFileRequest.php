@@ -18,21 +18,24 @@ class UploadAFileRequest extends Request implements HasBody
     protected Method $method = Method::POST;
 
     public function __construct(
-        protected readonly ?string $fileContent,
-        protected readonly ?string $fileName,
+        protected readonly string $fileContent,
+        protected readonly string $fileName,
+        protected readonly string $usageType,
 
     ) {}
 
     public function resolveEndpoint(): string
     {
-        return '/files';
+        return '/files/'.$this->usageType;
     }
 
     protected function defaultBody(): array
     {
-        return [
+        $defaultBody = [
             new MultipartValue(name: 'file', value: $this->fileContent, filename: $this->fileName),
         ];
+
+        return $defaultBody;
     }
 
     public function createDtoFromResponse(Response $response): File

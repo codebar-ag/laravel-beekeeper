@@ -28,8 +28,6 @@ class CreateAPostInAGivenStream extends Request implements HasBody
         protected readonly bool $reactionsDisabled = false,
         protected readonly ?string $scheduledAt = null,
         protected null|array|Collection $files = null,
-        protected null|array|Collection $photos = null,
-        protected null|array|Collection $videos = null,
         protected null|array|Collection $media = null,
         protected null|array|Collection $options = null,
         protected readonly array|Collection $expand = [],
@@ -97,26 +95,6 @@ class CreateAPostInAGivenStream extends Request implements HasBody
 
         if (! empty($files)) {
             $body = Arr::add(array: $body, key: 'files', value: $files);
-        }
-
-        $photos = $this->photos;
-
-        if ($photos instanceof Collection) {
-            $photos = $photos->toArray();
-        }
-
-        if (! empty($photos)) {
-            $body = Arr::add(array: $body, key: 'photos', value: $photos);
-        }
-
-        $videos = $this->videos;
-
-        if ($videos instanceof Collection) {
-            $videos = $videos->toArray();
-        }
-
-        if (! empty($videos)) {
-            $body = Arr::add(array: $body, key: 'videos', value: $videos);
         }
 
         $media = $this->media;
