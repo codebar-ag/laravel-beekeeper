@@ -10,7 +10,9 @@
 [![Dependency Review](https://github.com/codebar-ag/laravel-beekeeper/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/codebar-ag/laravel-beekeeper/actions/workflows/dependency-review.yml)
 
 This package was developed to give you a quick start to communicate with the
-Beekeeper Api. It is used to query the most common endpoints.
+Beekeeper API using token-based authentication. It provides a clean, type-safe
+interface to query the most common Beekeeper endpoints including artifacts,
+files, streams, and posts.
 
 ## Navigation
 <!-- TOC -->
@@ -23,7 +25,10 @@ Beekeeper Api. It is used to query the most common endpoints.
     * [List Artifacts](#list-artifacts)
     * [Upload A File](#upload-a-file)
     * [Create A Child To An Artifact](#create-a-child-to-an-artifact)
+    * [Delete An Artifact](#delete-an-artifact)
+    * [Create A Post In A Given Stream](#create-a-post-in-a-given-stream)
   * [DTO Showcase](#dto-showcase)
+  * [Available Enums](#available-enums)
   * [Testing](#testing)
   * [Changelog](#changelog)
   * [Contributing](#contributing)
@@ -67,19 +72,29 @@ This is the contents of the published config file:
 <?php
 
 return [
-
+    'api_token' => env('BEEKEEPER_API_TOKEN'),
+    'endpoint_prefix' => env('BEEKEEPER_ENDPOINT_PREFIX'),
+    'cache_store' => env('BEEKEEPER_CACHE_STORE')
 ];
 ```
 
 You should finally add the following to your .env file:
 
 ```env
-BEEKEEPER_CLIENT_ID=your-client-id
-BEEKEEPER_CLIENT_SECRET=your-client-secret
-BEEKEEPER_CACHE_STORE=beekeeper
+BEEKEEPER_API_TOKEN=your-api-token
+BEEKEEPER_ENDPOINT_PREFIX=codebar.us
+BEEKEEPER_CACHE_STORE=file
 ```
 
 ## Usage
+
+### Authentication
+
+This package uses token-based authentication with the Beekeeper API. You'll need to:
+
+1. Obtain an API token from your Beekeeper admin panel
+2. Set the `BEEKEEPER_API_TOKEN` environment variable
+3. Set your Beekeeper subdomain in `BEEKEEPER_ENDPOINT_PREFIX`
 
 ### Get the connector
 
@@ -127,6 +142,7 @@ $fileName = 'foobar.pdf';
 $response = $connector->send(new UploadAFileRequest(
     fileContent: $fileContent,
     fileName: $fileName,
+    usageType: 'attachment_file',
 ));
 ```
 
@@ -152,6 +168,67 @@ $response = $connector->send(new CreateAChildToAnArtifact(
     adjustArtifactName: false,
     expand: []
 ));
+```
+
+### Delete An Artifact
+
+```php
+use CodebarAg\LaravelBeekeeper\Requests\DeleteAnArtifact;
+
+$response = $connector->send(new DeleteAnArtifact(
+    artifactId: '12345678-abcd-efgh-9012-de00edbf7b0b'
+));
+
+// Returns a 204 No Content response on success
+```
+
+### Create A Post In A Given Stream
+
+```php
+use CodebarAg\LaravelBeekeeper\Requests\CreateAPostInAGivenStream;
+
+// Basic post creation
+$response = $connector->send(new CreateAPostInAGivenStream(
+    streamId: '6002',
+    text: 'Please indicate your preferred dates for next team event in the poll below. Thanks!'
+));
+
+// Advanced post with all options
+$fileData = [
+    'updated' => '2016-10-07T12:49:21',
+    'name' => 'fair_play_rules.pdf',
+    'created' => '2016-10-07T12:49:21',
+    'url' => 'https://mytenant.beekeeper.io/file/665987/original/fair_play_rules.pdf',
+    'userid' => '5cb9v45d-8i78-4v65-b5fd-81cgfac3ef17',
+    'height' => 619,
+    'width' => 700,
+    'duration' => 315,
+    'key' => 'f4fdaab0-d198-49b4-b1cc-dd85572d72f1',
+    'media_type' => 'image/png',
+    'usage_type' => 'attachment_image',
+    'id' => 66598,
+    'size' => 85
+];
+
+$response = $connector->send(new CreateAPostInAGivenStream(
+    streamId: '6002',
+    text: 'Please indicate your preferred dates for next team event in the poll below. Thanks!',
+    title: 'Hello guys!',
+    labels: ['food', 'poll', 'events'],
+    sticky: true,
+    locked: true,
+    reactionsDisabled: true,
+    scheduledAt: '2019-08-24T14:15:22',
+    files: [$fileData],
+    media: [$fileData],
+    options: [
+        ['text' => 'This Friday'],
+        ['text' => 'Monday next week']
+    ],
+    expand: ['user', 'stream']
+));
+
+$post = $response->dto(); // Returns a Post DTO
 ```
 
 ## DTO Showcase
@@ -183,7 +260,6 @@ CodebarAg\LaravelBeekeeper\Data\Configs\AuthenticatedUserStatus {
     +maxVideoSizeForAdmins: 2147483648                                  // int|null
     +maxVoiceRecordingLength: 900                                       // int|null
     +maxUsersInGroupChat: 200                                           // int|null
-    +reactions: Illuminate\Support\Collection                           // Collection|null
     +featureFlags: Illuminate\Support\Collection                        // Collection|null
     +integrations: Illuminate\Support\Collection                        // Collection|null
     +styling: Illuminate\Support\Collection                             // Collection|null
@@ -209,13 +285,6 @@ CodebarAg\LaravelBeekeeper\Data\Configs\General {
 }
 ```
 
-```php
-CodebarAg\LaravelBeekeeper\Data\Configs\Reaction {
-    +cldrShortName: "thumbs up"                                         // string
-    +name: "Like"                                                       // string
-    +emoji: "👍"                                                        // string
-}
-```
 
 ```php
 CodebarAg\LaravelBeekeeper\Data\Files\File {
@@ -246,7 +315,134 @@ CodebarAg\LaravelBeekeeper\Data\Files\FileVersion {
 }
 ```
     
+```php
+CodebarAg\LaravelBeekeeper\Data\Streams\Post {
+    +id: 2234                                                                                         // int
+    +text: "Please indicate your preferred dates for next team event in the poll below. Thanks!"     // string
+    +title: "Hello guys!"                                                                             // string|null
+    +labels: Illuminate\Support\Collection                                                            // Collection
+    +sticky: true                                                                                     // bool
+    +likeCount: 42                                                                                    // int
+    +streamId: 6002                                                                                   // int
+    +digest: 1                                                                                        // int
+    +userId: "5cb9v45d-8i78-4v65-b5fd-81cgfac3ef17"                                                  // string
+    +uuid: "731b28bc-7f10-4b68-a089-fc672abc9955"                                                    // string
+    +commentCount: 2                                                                                  // int
+    +reportCount: 0                                                                                   // int
+    +source: "beekeeper"                                                                              // string
+    +voteCount: 12                                                                                    // int
+    +moderated: true                                                                                  // bool
+    +photo: "https://d6698txzbomp3.cloudfront.net/72e3b7d4-c6a4-47e9-8f81-7b7d10bdd84a"              // string|null
+    +languageConfidence: 0.86                                                                         // float|null
+    +type: "post"                                                                                     // string
+    +metadata: "string"                                                                               // string|null
+    +profile: "peter_smith"                                                                           // string|null
+    +edited: true                                                                                     // bool
+    +displayNameExtension: "General Manager"                                                          // string|null
+    +subscribedByUser: true                                                                           // bool
+    +reportable: true                                                                                 // bool
+    +anonymous: true                                                                                  // bool
+    +displayName: "John Smith"                                                                        // string|null
+    +unread: true                                                                                     // bool
+    +locked: true                                                                                     // bool
+    +reactionsDisabled: true                                                                          // bool
+    +name: "Peter Smith"                                                                              // string|null
+    +language: "en"                                                                                   // string|null
+    +languageInformation: array                                                                       // array|null
+    +created: Carbon\CarbonImmutable                                                                  // CarbonImmutable|null
+    +postedByUser: true                                                                               // bool
+    +avatar: "https://dz343oy86h947.cloudfront.net/business/neutral/normal/05.png"                    // string|null
+    +reportedByUser: true                                                                             // bool
+    +likedByUser: true                                                                                // bool
+    +mentions: Illuminate\Support\Collection                                                          // Collection
+    +mentionsDetails: array                                                                           // array|null
+    +scheduledAt: Carbon\CarbonImmutable                                                              // CarbonImmutable|null
+    +status: "published"                                                                              // string|null
+    +files: Illuminate\Support\Collection                                                             // Collection
+    +photos: Illuminate\Support\Collection                                                            // Collection
+    +videos: Illuminate\Support\Collection                                                            // Collection
+    +media: Illuminate\Support\Collection                                                             // Collection
+    +options: Illuminate\Support\Collection                                                           // Collection
+    +stateId: "2017-06-19T08:49:53"                                                                  // string|null
+}
+```
 
+```php
+CodebarAg\LaravelBeekeeper\Data\Streams\Stream {
+    +id: "12345678-abcd-efgh-9012-de00edbf7b0b"                                                      // string
+    +tenantId: "12345"                                                                                // string
+    +name: "General Discussion"                                                                       // string
+    +description: "General discussion stream for all team members"                                    // string|null
+    +type: CodebarAg\LaravelBeekeeper\Enums\Streams\Type                                             // Type|null
+    +isPublic: true                                                                                   // bool
+    +isArchived: false                                                                                // bool
+    +createdAt: Carbon\CarbonImmutable                                                                // CarbonImmutable|null
+    +updatedAt: Carbon\CarbonImmutable                                                                // CarbonImmutable|null
+    +createdBy: "12345678-abcd-efgh-9012-de00edbf7b0b"                                               // string|null
+    +updatedBy: "12345678-abcd-efgh-9012-de00edbf7b0b"                                               // string|null
+    +posts: Illuminate\Support\Collection                                                             // Collection
+    +subscribers: Illuminate\Support\Collection                                                       // Collection
+    +permissions: Illuminate\Support\Collection                                                       // Collection
+    +metadata: Illuminate\Support\Collection                                                          // Collection
+}
+```
+
+## Available Enums
+
+The package provides several enums for type safety and better code organization:
+
+### Artifact Enums
+
+```php
+use CodebarAg\LaravelBeekeeper\Enums\Artifacts\Type;
+use CodebarAg\LaravelBeekeeper\Enums\Artifacts\Sort;
+
+// Artifact types
+Type::FOLDER
+Type::FILE
+
+// Sorting options
+Sort::NAME_ASC
+Sort::NAME_DESC
+Sort::CREATED_ASC
+Sort::CREATED_DESC
+```
+
+### File Enums
+
+```php
+use CodebarAg\LaravelBeekeeper\Enums\Files\Status;
+use CodebarAg\LaravelBeekeeper\Enums\Files\UsageType;
+
+// File status
+Status::PROCESSING
+Status::READY
+Status::ERROR
+
+// Usage types
+UsageType::ATTACHMENT_IMAGE
+UsageType::ATTACHMENT_FILE
+UsageType::ATTACHMENT_VIDEO
+UsageType::AVATAR
+UsageType::COVER_IMAGE
+UsageType::LOGO
+// ... and more
+```
+
+### Stream Enums
+
+```php
+use CodebarAg\LaravelBeekeeper\Enums\Streams\Type;
+
+// Stream types
+Type::PUBLIC
+Type::PRIVATE
+Type::ANNOUNCEMENT
+Type::DISCUSSION
+Type::PROJECT
+Type::DEPARTMENT
+Type::TEAM
+```
 
 ## Testing
 

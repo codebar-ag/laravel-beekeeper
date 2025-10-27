@@ -5,6 +5,7 @@ namespace CodebarAg\LaravelBeekeeper\Tests;
 use CodebarAg\LaravelBeekeeper\LaravelBeekeeperServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Saloon\Laravel\SaloonServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -21,6 +22,7 @@ class TestCase extends Orchestra
     {
         return [
             LaravelBeekeeperServiceProvider::class,
+            SaloonServiceProvider::class,
         ];
     }
 

@@ -7,16 +7,38 @@ use CodebarAg\LaravelBeekeeper\Enums\Files\Status;
 use CodebarAg\LaravelBeekeeper\Enums\Files\UsageType;
 use CodebarAg\LaravelBeekeeper\Requests\UploadAFileRequest;
 use Illuminate\Support\Collection;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Laravel\Facades\Saloon;
 
 test('can upload a file', function () {
-    $connector = new BeekeeperConnector;
-
     $fileContent = file_get_contents(__DIR__.'/../../Fixtures/files/test-1.pdf');
     $fileName = 'test-1.pdf';
 
+    Saloon::fake([
+        UploadAFileRequest::class => MockResponse::make([
+            'name' => $fileName,
+            'status' => 'ready',
+            'created' => '2023-01-01T00:00:00Z',
+            'updated' => '2023-01-01T00:00:00Z',
+            'url' => 'https://example.com/file.pdf',
+            'userid' => 'user-123',
+            'width' => null,
+            'height' => null,
+            'key' => 'file-key-123',
+            'duration' => null,
+            'media_type' => 'application/pdf',
+            'usage_type' => 'attachment_file',
+            'id' => 12345,
+            'size' => strlen($fileContent),
+            'versions' => [],
+        ], 200),
+    ]);
+
+    $connector = new BeekeeperConnector;
     $response = $connector->send(new UploadAFileRequest(
         fileContent: $fileContent,
         fileName: $fileName,
+        usageType: 'attachment_file',
     ));
 
     $uploadAFile = $response->dto();
