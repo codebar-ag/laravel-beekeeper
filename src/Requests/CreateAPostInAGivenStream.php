@@ -20,7 +20,7 @@ class CreateAPostInAGivenStream extends Request implements HasBody
 
     public function __construct(
         protected readonly string $streamId,
-        protected readonly ?string $text = null,
+        protected readonly string $text,
         protected readonly ?string $title = null,
         protected null|array|Collection $labels = null,
         protected readonly bool $sticky = false,
