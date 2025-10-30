@@ -20,7 +20,7 @@ class CreateAPostInAGivenStream extends Request implements HasBody
 
     public function __construct(
         protected readonly string $streamId,
-        protected readonly string $text,
+        protected readonly ?string $text = null,
         protected readonly ?string $title = null,
         protected null|array|Collection $labels = null,
         protected readonly bool $sticky = false,
@@ -53,12 +53,14 @@ class CreateAPostInAGivenStream extends Request implements HasBody
 
     public function defaultBody(): array
     {
-        $body = [
-            'text' => $this->text,
-        ];
+        $body = [];
 
-        if (! empty($this->title)) {
+        if (filled($this->title)) {
             $body = Arr::add(array: $body, key: 'title', value: $this->title);
+        }
+
+        if (filled($this->text)) {
+            $body = Arr::add(array: $body, key: 'text', value: $this->text);
         }
 
         $labels = $this->labels;
