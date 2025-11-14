@@ -213,6 +213,7 @@ $fileData = [
 $response = $connector->send(new CreateAPostInAGivenStream(
     streamId: '6002',
     text: 'Please indicate your preferred dates for next team event in the poll below. Thanks!',
+    html: '<p>Please <b>indicate</b> your preferred dates below.</p><p>Thanks!</p>',
     title: 'Hello guys!',
     labels: ['food', 'poll', 'events'],
     sticky: true,
@@ -318,7 +319,8 @@ CodebarAg\LaravelBeekeeper\Data\Files\FileVersion {
 ```php
 CodebarAg\LaravelBeekeeper\Data\Streams\Post {
     +id: 2234                                                                                         // int
-    +text: "Please indicate your preferred dates for next team event in the poll below. Thanks!"     // string
+    +text: "Please indicate your preferred dates for next team event in the poll below. Thanks!"     // string|null
+    +html: "<p>Please <b>indicate</b> your preferred dates below.</p><p>Thanks!</p>"                  // string|null
     +title: "Hello guys!"                                                                             // string|null
     +labels: Illuminate\Support\Collection                                                            // Collection
     +sticky: true                                                                                     // bool
