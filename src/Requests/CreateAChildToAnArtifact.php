@@ -51,6 +51,7 @@ class CreateAChildToAnArtifact extends Request implements HasBody
 
     public function defaultBody(): array
     {
+
         $body = [
             'name' => $this->name,
             'type' => $this->type,
