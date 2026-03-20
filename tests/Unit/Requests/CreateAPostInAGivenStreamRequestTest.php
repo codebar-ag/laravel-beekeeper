@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\CarbonImmutable;
 use CodebarAg\LaravelBeekeeper\Data\Files\File;
 use CodebarAg\LaravelBeekeeper\Data\Streams\Post;
 use CodebarAg\LaravelBeekeeper\Requests\CreateAPostInAGivenStream;
@@ -276,7 +277,7 @@ test('post data mapping works correctly', function () {
         ->and($post->name)->toBe('Peter Smith')
         ->and($post->language)->toBe('en')
         ->and($post->languageInformation)->toBeArray()
-        ->and($post->created)->toBeInstanceOf(\Carbon\CarbonImmutable::class)
+        ->and($post->created)->toBeInstanceOf(CarbonImmutable::class)
         ->and($post->postedByUser)->toBeTrue()
         ->and($post->avatar)->toBe('https://dz343oy86h947.cloudfront.net/business/neutral/normal/05.png')
         ->and($post->reportedByUser)->toBeTrue()
@@ -284,7 +285,7 @@ test('post data mapping works correctly', function () {
         ->and($post->mentions)->toBeInstanceOf(Collection::class)
         ->and($post->mentions->toArray())->toBe(['john_smith'])
         ->and($post->mentionsDetails)->toBeArray()
-        ->and($post->scheduledAt)->toBeInstanceOf(\Carbon\CarbonImmutable::class)
+        ->and($post->scheduledAt)->toBeInstanceOf(CarbonImmutable::class)
         ->and($post->status)->toBe('published')
         ->and($post->files)->toBeInstanceOf(Collection::class)
         ->and($post->files)->toHaveCount(1)
