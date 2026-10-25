@@ -36,7 +36,7 @@ class CreateAPostInAGivenStream extends Request implements HasBody
 
     public function resolveEndpoint(): string
     {
-        return '/streams/'.$this->streamId.'/posts';
+        return '/streams/'.rawurlencode($this->streamId).'/posts';
     }
 
     protected function defaultQuery(): array

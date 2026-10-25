@@ -15,6 +15,6 @@ class DeleteAnArtifact extends Request
 
     public function resolveEndpoint(): string
     {
-        return '/artifacts/'.$this->artifactId;
+        return '/artifacts/'.rawurlencode($this->artifactId);
     }
 }
