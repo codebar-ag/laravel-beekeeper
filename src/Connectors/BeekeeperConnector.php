@@ -68,6 +68,14 @@ class BeekeeperConnector extends Connector
             $endpointPrefix = config('beekeeper.endpoint_prefix');
         }
 
-        $this->endpointPrefix = Str::of(string: $endpointPrefix)->trim()->rtrim(characters: '.')->toString();
+        $endpointPrefix = Str::of(string: $endpointPrefix)->trim()->rtrim(characters: '.')->toString();
+
+        // The prefix becomes part of the host name, so characters like "/", "?", "#", "@" or ":"
+        // would let the request (and the API token) go to a different host.
+        if (preg_match('/^[A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)*$/', $endpointPrefix) !== 1) {
+            throw new Exception('Beekeeper endpoint prefix is invalid');
+        }
+
+        $this->endpointPrefix = $endpointPrefix;
     }
 }
