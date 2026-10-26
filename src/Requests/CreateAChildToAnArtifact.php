@@ -32,7 +32,7 @@ class CreateAChildToAnArtifact extends Request implements HasBody
 
     public function resolveEndpoint(): string
     {
-        return '/artifacts/'.$this->artifactId.'/children';
+        return '/artifacts/'.rawurlencode($this->artifactId).'/children';
     }
 
     protected function defaultQuery(): array

@@ -26,7 +26,7 @@ class UploadAFileRequest extends Request implements HasBody
 
     public function resolveEndpoint(): string
     {
-        return '/files/'.$this->usageType;
+        return '/files/'.rawurlencode($this->usageType);
     }
 
     protected function defaultBody(): array
